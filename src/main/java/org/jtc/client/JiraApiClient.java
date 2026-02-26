@@ -1,0 +1,80 @@
+package org.jtc.client;
+
+import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.log4j.Log4j2;
+import org.jtc.config.JiraProperties;
+import org.springframework.stereotype.Component;
+
+import java.util.Base64;
+
+@Component
+@Log4j2
+public class JiraApiClient {
+
+    private final JiraProperties properties;
+    private RequestSpecification requestSpec;
+
+    public JiraApiClient(JiraProperties properties) {
+        this.properties = properties;
+    }
+
+    // создаем конфигурацию подключения к jira
+    @PostConstruct
+    public void init() {
+        RestAssured.baseURI = properties.getUrl();
+
+        // устанавливаем время в течении которого программа будет пытаться подключиться к jira
+        // устанавливаем время в течении которго программа будет пытаться отправить запрос в jira
+        RestAssured.config = RestAssured.config()
+                .httpClient(RestAssured.config().getHttpClientConfig()
+                        .setParam("http.connection.timeout", properties.getApi().getConnectTimeout())
+                        .setParam("http.socket.timeout", properties.getApi().getReadTimeout()));
+
+        // создаем шаблон для запроса в jira
+        this.requestSpec = new RequestSpecBuilder()
+                .setContentType(ContentType.JSON)
+                .addHeader("Authorization", createAuthHeader())
+                .addFilter(new RequestLoggingFilter())
+                .addFilter(new ResponseLoggingFilter())
+                .build();
+
+        testConnection();
+    }
+
+    // метод для генерации заголовка с именем и токеном
+    private String createAuthHeader() {
+        String credentials = properties.getName() + ":" + properties.getToken();
+        String encoded = Base64.getEncoder().encodeToString(credentials.getBytes());
+        return "Basic " + encoded;
+    }
+
+    private void testConnection() {
+        try {
+            Response response = RestAssured
+                    .given()
+                    .spec(requestSpec)
+                    .when()
+                    .get("/rest/api/" + properties.getApi().getVersion() + "/myself")
+                    .then()
+                    .extract().response();
+
+            if (response.getStatusCode() == 200) {
+                String displayName = response.jsonPath().getString("displayName");
+                log.info("Подключение успешно! Пользователь: {}", displayName);
+            } else {
+                log.error("Ошибка подключения. Код: {}, тело: {}",
+                        response.statusCode(), response.body().asString());
+            }
+        } catch (Exception e) {
+            log.error("Не удалось подключиться к Jira", e);
+        }
+    }
+
+}
