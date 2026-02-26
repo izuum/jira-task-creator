@@ -23,9 +23,18 @@ public class JiraProperties {
 
     private Project project = new Project();
 
+    private Api api = new Api();
+
     @Data
     public static class Project {
         @NotBlank(message = "Ключ проекта обязателен")
         private String key;
+    }
+
+    @Data
+    public static class Api{
+        private String version = "3";
+        private int connectTimeout = 10000;
+        private int readTimeout = 30000;
     }
 }
