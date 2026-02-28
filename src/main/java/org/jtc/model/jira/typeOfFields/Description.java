@@ -8,8 +8,6 @@ import java.util.List;
 
 //Описание задачи в формате ADF (Atlassian Document Format)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Description {
     private String type = "doc";
     private int version = 1;

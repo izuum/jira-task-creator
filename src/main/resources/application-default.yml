@@ -6,5 +6,7 @@ jira:
   url: ${JIRA_URL}    //отредактировать, вставить реальные данные
   username: ${JIRA_USERNAME}    //отредактировать, вставить реальные данные
   token: ${JIRA_TOKEN}    //отредактировать, вставить реальные данные
-  project:
-    key: ${JIRA_PROJECT_KEY}    //отредактировать, вставить реальные данные
+  api:
+    version: 3
+    connect-timeout: 10000
+    read-timeout: 30000
