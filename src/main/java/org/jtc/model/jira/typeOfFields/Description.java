@@ -1,4 +1,4 @@
-package org.jtc.model.yaml.typeOfFields;
+package org.jtc.model.jira.typeOfFields;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,9 +6,8 @@ import lombok.NoArgsConstructor;
 import java.util.Collections;
 import java.util.List;
 
+//Описание задачи в формате ADF (Atlassian Document Format)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Description {
     private String type = "doc";
     private int version = 1;
@@ -20,6 +19,7 @@ public class Description {
         this.content = Collections.singletonList(paragraph);
     }
 
+    //Узел контента в ADF (параграф, заголовок, список и т.д.)
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -28,6 +28,7 @@ public class Description {
         private List<TextNode> content;
     }
 
+    // Текстовый узел в ADF
     @Data
     @NoArgsConstructor
     @AllArgsConstructor

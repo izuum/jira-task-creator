@@ -1,16 +1,24 @@
 package org.jtc.model.yaml;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.jtc.model.yaml.typeOfFields.Fields;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class IssueData {
-    private Fields fields;
+    private String project;
+    private String summary;
+    private String issueType;
+    private String priority;
+    private String description;
 
+    public void validateRequiredFields() {
+        if (project == null || project.trim().isEmpty()) {
+            throw new IllegalArgumentException("Отсутствует ключ проекта (project)");
+        }
+        if (summary == null || summary.trim().isEmpty()) {
+            throw new IllegalArgumentException("Отсутствует краткое описание задачи (summary)");
+        }
+        if (issueType == null || issueType.trim().isEmpty()) {
+            throw new IllegalArgumentException("Отсутствует тип задачи (issueType)");
+        }
+    }
 }

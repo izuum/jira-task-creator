@@ -8,5 +8,3 @@ jira:
   url: ${JIRA_URL}
   username: ${JIRA_USERNAME}
   token: ${JIRA_TOKEN}
-  project:
-    key: ${JIRA_PROJECT_KEY}
