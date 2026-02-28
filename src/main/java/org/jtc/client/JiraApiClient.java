@@ -10,6 +10,9 @@ import io.restassured.specification.RequestSpecification;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
 import org.jtc.config.JiraProperties;
+import org.jtc.exceptions.ImportException;
+import org.jtc.model.jira.JiraIssue;
+import org.jtc.model.jira.JiraResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
@@ -45,23 +48,26 @@ public class JiraApiClient {
                 .addFilter(new ResponseLoggingFilter())
                 .build();
 
+        log.info("Jira клиент инициализирован для URL: {}", properties.getUrl());
         testConnection();
     }
 
     // метод для генерации заголовка с именем и токеном
     private String createAuthHeader() {
-        String credentials = properties.getName() + ":" + properties.getToken();
+        String credentials = properties.getUserName() + ":" + properties.getToken();
         String encoded = Base64.getEncoder().encodeToString(credentials.getBytes());
         return "Basic " + encoded;
     }
 
     private void testConnection() {
         try {
+
+            String endpoint = String.format("/rest/api/%s/myself", properties.getApi().getVersion());
             Response response = RestAssured
                     .given()
                     .spec(requestSpec)
                     .when()
-                    .get("/rest/api/" + properties.getApi().getVersion() + "/myself")
+                    .get(endpoint)
                     .then()
                     .extract().response();
 
@@ -74,6 +80,35 @@ public class JiraApiClient {
             }
         } catch (Exception e) {
             log.error("Не удалось подключиться к Jira", e);
+        }
+    }
+
+    public JiraResponse createIssue(JiraIssue jiraIssue) {
+        log.info("Отправка запроса на создание задачи");
+
+        String endpoint = String.format("/rest/api/%s/issue", properties.getApi().getVersion());
+        try {
+            Response response = RestAssured
+                    .given()
+                    .spec(requestSpec)
+                    .body(jiraIssue)
+                    .when()
+                    .post(endpoint)
+                    .then()
+                    .extract().response();
+
+            if(response.getStatusCode() == 201) {
+                JiraResponse jiraResponse = response.as(JiraResponse.class);
+                log.info("Задача создана: {}", jiraResponse.getKey());
+                return jiraResponse;
+            } else {
+                log.error("Ошибка создания задачи. Код: {}, тело: {}",
+                        response.statusCode(), response.body().asString());
+                throw new ImportException("Ошбика создания задачи. Код:  " + response.statusCode());
+            }
+        } catch (Exception e) {
+            log.error("Исключение при вызове Jira API", e);
+            throw new ImportException("Ошибка создания задачи", e);
         }
     }
 
