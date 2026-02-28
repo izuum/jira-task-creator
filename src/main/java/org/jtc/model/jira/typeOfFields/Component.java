@@ -1,4 +1,4 @@
-package org.jtc.model.yaml.typeOfFields;
+package org.jtc.model.jira.typeOfFields;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package org.jtc.model.yaml.typeOfFields;
+package org.jtc.model.jira.typeOfFields;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -16,6 +16,6 @@ public class Fields {
     private JiraProperties.Project project;
     private String summary;
     private Component issueType;
-    private Description description;
     private Component priority;
+    private Description description;
 }
