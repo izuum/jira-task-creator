@@ -22,6 +22,7 @@ import java.util.Base64;
 public class JiraApiClient {
 
     private final JiraProperties properties;
+    // шаблон из библиотеки RestAssured для создания http-запроса
     private RequestSpecification requestSpec;
 
     public JiraApiClient(JiraProperties properties) {
@@ -61,7 +62,6 @@ public class JiraApiClient {
 
     private void testConnection() {
         try {
-
             String endpoint = String.format("/rest/api/%s/myself", properties.getApi().getVersion());
             Response response = RestAssured
                     .given()
@@ -86,8 +86,8 @@ public class JiraApiClient {
     public JiraResponse createIssue(JiraIssue jiraIssue) {
         log.info("Отправка запроса на создание задачи");
 
-        String endpoint = String.format("/rest/api/%s/issue", properties.getApi().getVersion());
         try {
+            String endpoint = String.format("/rest/api/%s/issue", properties.getApi().getVersion());
             Response response = RestAssured
                     .given()
                     .spec(requestSpec)
@@ -111,5 +111,4 @@ public class JiraApiClient {
             throw new ImportException("Ошибка создания задачи", e);
         }
     }
-
 }
