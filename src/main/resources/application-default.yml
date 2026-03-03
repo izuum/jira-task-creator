@@ -3,10 +3,21 @@ spring:
     name: jira-task-creator
 
 jira:
-  url: ${JIRA_URL}    //отредактировать, вставить реальные данные
-  username: ${JIRA_USERNAME}    //отредактировать, вставить реальные данные
-  token: ${JIRA_TOKEN}    //отредактировать, вставить реальные данные
+  url: ${JIRA_URL}
+  username: ${JIRA_USERNAME}
+  token: ${JIRA_TOKEN}
   api:
     version: 3
     connect-timeout: 10000
     read-timeout: 30000
+
+logging:
+  level:
+    org.jtc: DEBUG
+    io.restassured: DEBUG
+  file:
+    name: .logs/jtc.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 10

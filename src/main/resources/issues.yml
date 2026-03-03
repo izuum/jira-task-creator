@@ -1,0 +1,22 @@
+# Обязательные поля:
+#    project
+#    summary
+#    type
+# Задачи обозначаются типами: "Задание", "Функция", "Баг"
+# Приоритет обозначается типами: "High", "Medium", "Low"
+
+issues:
+  - project: "QL"
+    summary: "Разобраться с тестированием"
+    type: "Задание"
+
+  - project: "QL"
+    summary: "Реализовать REST клиент"
+    type: "Функция"
+    priority: "High"
+
+  - project: "QL"
+    summary: "Что то не запускается"
+    type: "Баг"
+    priority: "High"
+    description: "Нужно написать клиент для Jira API"
