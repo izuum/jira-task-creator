@@ -3,6 +3,7 @@ package org.jtc.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jtc.client.JiraApiClient;
+import org.jtc.client.JiraApiClientWithoutReqSpec;
 import org.jtc.exceptions.ImportException;
 import org.jtc.model.jira.JiraIssue;
 import org.jtc.model.jira.JiraResponse;
@@ -22,7 +23,8 @@ public class ImportOrchestrator {
 
     private final YamlReaderService yamlReader;
     private final IssueTransformerService issueTransformer;
-    private final JiraApiClient jiraApiClient;
+//    private final JiraApiClient jiraApiClient;
+    private final JiraApiClientWithoutReqSpec jiraApiClient;
 
     public record ImportResult(
             int total,

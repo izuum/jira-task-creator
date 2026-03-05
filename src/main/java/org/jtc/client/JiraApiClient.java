@@ -17,7 +17,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 
-@Component
+// API клиент, который использует шаблон из rest assured для создания http-запроса
+//@Component
 @Log4j2
 public class JiraApiClient {
 
