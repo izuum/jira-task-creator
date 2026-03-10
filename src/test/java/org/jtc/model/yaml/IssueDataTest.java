@@ -1,4 +1,4 @@
-package org.jtc.model.jira.yaml;
+package org.jtc.model.yaml;
 
 import org.jtc.model.yaml.IssueData;
 import org.junit.jupiter.api.BeforeEach;
