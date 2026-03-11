@@ -50,12 +50,82 @@ public class YamlReaderServiceTest {
     }
 
     @Test
-    void shouldThrownExceptionWhenFileNotFound(){
+    void shouldThrowExceptionWhenFileNotFound(){
         String nonExistentFile = "non-existent-file.yml";
 
         ImportException exception = assertThrows(ImportException.class, () ->
                 yamlReaderService.readIssue(nonExistentFile));
 
         assertTrue(exception.getMessage().contains("Файл не найден"));
+    }
+
+    @Test
+    void shouldHandleEmptyFile(@TempDir Path tempDir) throws IOException {
+
+        Path yamlFile = tempDir.resolve("issues.yaml");
+        Files.writeString(yamlFile, "issues: []");
+
+        IssueImport result = yamlReaderService.readIssue(yamlFile.toString());
+
+        assertNotNull(result);
+        assertNotNull(result.getIssues());
+        assertTrue(result.getIssues().isEmpty());
+    }
+
+    @Test
+    void shouldIgnoreUnknownFields(@TempDir Path tempDir) throws IOException {
+        Path yamlFile = tempDir.resolve("issues.yaml");
+        String yamlContent = """
+                issues:
+                  - project: "TEST"
+                    summary: "some summary"
+                    type: "Task"
+                    priority: "1"
+                    description: "some description"
+                    unknownField: "should be ignore"
+                """;
+
+        Files.writeString(yamlFile, yamlContent);
+
+        IssueImport result = yamlReaderService.readIssue(yamlFile.toString());
+        assertNotNull(result);
+        assertEquals(1, result.getIssues().size());
+
+        IssueData issue = result.getIssues().get(0);
+        assertEquals("TEST", issue.getProject());
+        assertEquals("some summary", issue.getSummary());
+        assertEquals("Task", issue.getIssueType());
+        assertEquals("1", issue.getPriority());
+        assertEquals("some description", issue.getDescription());
+    }
+
+    @Test
+    void shouldReadMultipleIssues(@TempDir Path tempDir) throws IOException {
+        Path yamlFile = tempDir.resolve("issues.yaml");
+        String yamlContent = """
+                issues:
+                  - project: "TEST1"
+                    summary: "some summary"
+                    type: "Task"
+                  - project: "TEST2"
+                    summary: "other summary"
+                    type: "Bug"
+                  - project: "TEST3"
+                    summary: "another summary"
+                    type: "Function"
+                """;
+        Files.writeString(yamlFile, yamlContent);
+
+        IssueImport result = yamlReaderService.readIssue(yamlFile.toString());
+
+        assertEquals(3, result.getIssues().size());
+        assertEquals("TEST1", result.getIssues().get(0).getProject());
+        assertEquals("TEST2", result.getIssues().get(1).getProject());
+        assertEquals("TEST3", result.getIssues().get(2).getProject());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenPathIsEmpty(){
+        assertThrows(ImportException.class, () -> yamlReaderService.readIssue(""));
     }
 }
