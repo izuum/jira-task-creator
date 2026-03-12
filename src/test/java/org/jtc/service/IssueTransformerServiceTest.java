@@ -91,4 +91,37 @@ public class IssueTransformerServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> transformer.transformToJiraIssue(issue));
     }
+
+    @Test
+    void shouldHandleEmptyString(){
+        IssueData issue = new IssueData();
+        issue.setProject("TEST");
+        issue.setSummary("");
+        issue.setIssueType("Task");
+        issue.setPriority("");
+        issue.setDescription("");
+
+        JiraIssue result = transformer.transformToJiraIssue(issue);
+        Fields fields = result.getFields();
+
+        assertEquals("", fields.getSummary());
+        assertNull(fields.getPriority());
+        assertNull(fields.getDescription());
+    }
+
+    @Test
+    void shouldHandleNullOptionalFields(){
+        IssueData issue = new IssueData();
+        issue.setProject("TEST");
+        issue.setSummary("Test");
+        issue.setIssueType("Task");
+        issue.setPriority(null);
+        issue.setDescription(null);
+
+        JiraIssue result = transformer.transformToJiraIssue(issue);
+
+        Fields fields = result.getFields();
+        assertNull(fields.getPriority());
+        assertNull(fields.getDescription());
+    }
 }
