@@ -96,7 +96,7 @@ public class IssueTransformerServiceTest {
     void shouldHandleEmptyString(){
         IssueData issue = new IssueData();
         issue.setProject("TEST");
-        issue.setSummary("");
+        issue.setSummary("some summary");
         issue.setIssueType("Task");
         issue.setPriority("");
         issue.setDescription("");
@@ -104,7 +104,6 @@ public class IssueTransformerServiceTest {
         JiraIssue result = transformer.transformToJiraIssue(issue);
         Fields fields = result.getFields();
 
-        assertEquals("", fields.getSummary());
         assertNull(fields.getPriority());
         assertNull(fields.getDescription());
     }

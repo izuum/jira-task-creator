@@ -18,10 +18,11 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <rest-assured.version>6.0.0</rest-assured.version>
-        <jackson.version>2.15.2</jackson.version>
+        <jackson.version>2.21.1</jackson.version>
         <log4j.version>2.25.3</log4j.version>
         <junit.version>5.10.0</junit.version>
         <assertj.version>3.27.7</assertj.version>
+        <cucumber.version>7.34.3</cucumber.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -88,6 +89,24 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>6.0.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -104,5 +123,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
