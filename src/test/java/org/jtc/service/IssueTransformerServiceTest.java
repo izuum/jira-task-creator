@@ -59,4 +59,36 @@ public class IssueTransformerServiceTest {
         assertEquals("some description",
                 fields.getDescription().getContent().get(0).getContent().get(0).getText());
     }
+
+    @Test
+    void shouldThrowExceptionWhenProjectIsMissing(){
+        IssueData issue = new IssueData();
+        issue.setSummary("without project");
+        issue.setIssueType("Task");
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> transformer.transformToJiraIssue(issue));
+
+        assertTrue(exception.getMessage().toLowerCase().contains("проект"));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenSummaryIsMissing(){
+        IssueData issue = new IssueData();
+        issue.setProject("TEST without summary");
+        issue.setIssueType("Bug");
+
+        assertThrows(IllegalArgumentException.class,
+                () -> transformer.transformToJiraIssue(issue));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenIssueTypeIsMissing(){
+        IssueData issue = new IssueData();
+        issue.setProject("TEST");
+        issue.setSummary("without issuetype");
+
+        assertThrows(IllegalArgumentException.class,
+                () -> transformer.transformToJiraIssue(issue));
+    }
 }
