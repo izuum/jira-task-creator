@@ -15,9 +15,7 @@ public class IssueTransformerService {
     public JiraIssue transformToJiraIssue(IssueData issue) {
         log.debug("Преобразование задачи: {}", issue.getSummary());
 
-        if (issue.getProject() == null || issue.getProject().isEmpty()) {
-            throw new IllegalArgumentException("У задачи не указан проект: " + issue.getProject());
-        }
+        validateRequiredFieldsOfIssue(issue);
 
         Project project = new Project(issue.getProject());
         Component issueType = new Component(issue.getIssueType());
