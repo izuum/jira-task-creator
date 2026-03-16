@@ -19,6 +19,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <rest-assured.version>6.0.0</rest-assured.version>
         <jackson.version>2.21.1</jackson.version>
+        <jackson.annotations.version>2.21</jackson.annotations.version>
         <log4j.version>2.25.3</log4j.version>
         <junit.version>5.10.0</junit.version>
         <assertj.version>3.27.7</assertj.version>
@@ -49,6 +50,11 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.annotations.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -92,6 +98,12 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-core</artifactId>
             <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
