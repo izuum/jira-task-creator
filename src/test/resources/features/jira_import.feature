@@ -7,7 +7,7 @@ Feature: Jira Import
     Given Jira API настроена на "https://dstepds.atlassian.net"
 
   Scenario: Успешный импорт одной задачи
-    Given YAML файл с одной задачей:
+    Given YAML файл с задачами
     """
     issues:
     - project: "TEST"
@@ -21,3 +21,23 @@ Feature: Jira Import
     Then Программа должна завершиться успешно
     And В Jira должна создаться одна задача
     And У задачи должен быть ключ вида "TEST-*"
+
+  Scenario: Успешный импорт 3 задач
+    Given YAML файл с задачами
+    """
+    issues:
+    - project: "TEST"
+      summary: "first summary for test"
+      type: "Task"
+    - project: "TEST"
+      summary: "second summary for test"
+      type: "Bug"
+    - project: "TEST"
+      summary: "third summary for test"
+      type: "Feature"
+    """
+
+    When Я запускаю программу
+    Then Программа должна завершиться успешно
+    And В Jira должны создаться три задачи
+    And У задач должны быть ключи вида "TEST-*"

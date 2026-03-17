@@ -51,8 +51,8 @@ public class JiraImportSteps{
         when(jiraApiClient.createIssue(any())).thenReturn(mockResponse);
     }
 
-    @Дано("YAML файл с одной задачей:")
-    public void yamlФайлСОднойЗадачей(String yamlContent) throws Exception{
+    @Дано("YAML файл с задачами")
+    public void yamlФайлСЗадачами(String yamlContent) throws Exception{
         filePath = Files.createTempFile("test", ".yml");
         Files.writeString(filePath, yamlContent);
         System.out.println("Cоздан файл: " + filePath);
@@ -84,4 +84,21 @@ public class JiraImportSteps{
         Assertions.assertTrue(actualKey.matches(pattern.replace("*", ".*")));
         Assertions.assertTrue(true);
     }
+
+    @Тогда("В Jira должны создаться три задачи")
+    public void вJiraДолжныСоздатьсяТриЗадачи(){
+        Assertions.assertEquals(3, importResult.success());
+    }
+
+    @Тогда("У задач должны быть ключи вида {string}")
+    public void уЗадачДолжныБытьКлючиВида(String pattern){
+        String firstActualKey = importResult.createdKeys().get(0);
+        String secondActualKey = importResult.createdKeys().get(1);
+        String thirdActualKey = importResult.createdKeys().get(2);
+        Assertions.assertTrue(firstActualKey.matches(pattern.replace("*", ".*")));
+        Assertions.assertTrue(secondActualKey.matches(pattern.replace("*", ".*")));
+        Assertions.assertTrue(thirdActualKey.matches(pattern.replace("*", ".*")));
+        Assertions.assertTrue(true);
+    }
+
 }
