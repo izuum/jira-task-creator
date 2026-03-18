@@ -19,7 +19,7 @@ import java.nio.file.Path;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class JiraImportSteps{
+public class JiraImportSteps {
 
     @Mock
     protected JiraApiClientWithoutReqSpec jiraApiClient;
@@ -31,7 +31,7 @@ public class JiraImportSteps{
     protected Exception exception;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
         orchestrator = new ImportOrchestrator(
                 new YamlReaderService(),
@@ -41,7 +41,7 @@ public class JiraImportSteps{
     }
 
     @Дано("Jira API настроена на {string}")
-    public void jiraApiНастроенаНа(String url){
+    public void jiraApiНастроенаНа(String url) {
         when(jiraProperties.getUrl()).thenReturn(url);
         when(jiraProperties.getUserName()).thenReturn("testuser");
         when(jiraProperties.getToken()).thenReturn("testtoken");
@@ -52,46 +52,46 @@ public class JiraImportSteps{
     }
 
     @Дано("YAML файл с задачами")
-    public void yamlФайлСЗадачами(String yamlContent) throws Exception{
+    public void yamlФайлСЗадачами(String yamlContent) throws Exception {
         filePath = Files.createTempFile("test", ".yml");
         Files.writeString(filePath, yamlContent);
         System.out.println("Cоздан файл: " + filePath);
     }
 
     @Дано("Я запускаю программу")
-    public void яЗапускаюПрограмму(){
+    public void яЗапускаюПрограмму() {
         try {
             importResult = orchestrator.importIssue(filePath.toString());
             exception = null;
-        } catch (Exception e){
+        } catch (Exception e) {
             exception = e;
         }
     }
 
     @Тогда("Программа должна завершиться успешно")
-    public void программаДолжнаЗавершитьсяУспешно(){
+    public void программаДолжнаЗавершитьсяУспешно() {
         Assertions.assertNull(exception, "Программа упала с ошибкой: " + exception);
     }
 
     @Тогда("В Jira должна создаться одна задача")
-    public void вJiraДолжнаСоздатьсяОднаЗадача(){
+    public void вJiraДолжнаСоздатьсяОднаЗадача() {
         Assertions.assertEquals(1, importResult.success());
     }
 
     @Тогда("У задачи должен быть ключ вида {string}")
-    public void уЗадачиДолженБытьКлючВида(String pattern){
+    public void уЗадачиДолженБытьКлючВида(String pattern) {
         String actualKey = importResult.createdKeys().get(0);
         Assertions.assertTrue(actualKey.matches(pattern.replace("*", ".*")));
         Assertions.assertTrue(true);
     }
 
     @Тогда("В Jira должны создаться три задачи")
-    public void вJiraДолжныСоздатьсяТриЗадачи(){
+    public void вJiraДолжныСоздатьсяТриЗадачи() {
         Assertions.assertEquals(3, importResult.success());
     }
 
     @Тогда("У задач должны быть ключи вида {string}")
-    public void уЗадачДолжныБытьКлючиВида(String pattern){
+    public void уЗадачДолжныБытьКлючиВида(String pattern) {
         String firstActualKey = importResult.createdKeys().get(0);
         String secondActualKey = importResult.createdKeys().get(1);
         String thirdActualKey = importResult.createdKeys().get(2);
@@ -101,4 +101,7 @@ public class JiraImportSteps{
         Assertions.assertTrue(true);
     }
 
+    @Тогда("Программа должна завершиться с ошибкой")
+    public void программаДолжнаЗавершитьсяСОшибкой() {
+    }
 }
