@@ -11,12 +11,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class ValidationRequiredFieldsSteps {
-    private TestContext context;
+    private final TestContext context;
 
-    public ValidationRequiredFieldsSteps(TestContext context){
+    public ValidationRequiredFieldsSteps(TestContext context) {
         this.context = context;
     }
 
+    @Then("Программа должна выбросить ошибку с сообщением об отсутствии поля {string}")
+    public void shouldThrowExceptionWithoutSummary() {
 
+    }
 
 }
