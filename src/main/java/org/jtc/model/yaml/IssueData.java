@@ -13,13 +13,13 @@ public class IssueData {
     private String description;
 
     public void validateRequiredFields() {
-        if (project == null || project.trim().isEmpty()) {
+        if (project == null || project.isBlank()) {
             throw new IllegalArgumentException("Отсутствует ключ проекта (project)");
         }
-        if (summary == null || summary.trim().isEmpty()) {
+        if (summary == null || summary.isBlank()) {
             throw new IllegalArgumentException("Отсутствует краткое описание задачи (summary)");
         }
-        if (issueType == null || issueType.trim().isEmpty()) {
+        if (issueType == null || issueType.isBlank()) {
             throw new IllegalArgumentException("Отсутствует тип задачи (issueType)");
         }
     }
