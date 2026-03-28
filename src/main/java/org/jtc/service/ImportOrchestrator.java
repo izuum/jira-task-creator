@@ -62,9 +62,9 @@ public class ImportOrchestrator {
         // Для статистики сколько задач и для каких проектов
         Map<String, Long> projectsCount = issues.stream()
                 .collect(Collectors.groupingBy(
-                        IssueData::getProject,
+                        issue -> issue.getProject() != null ? issue.getProject() : "БЕЗ_ПРОЕКТА",
                         Collectors.counting()
-                        ));
+                ));
 
         log.info("Распределение по проектам:");
         projectsCount.forEach((project, count) ->
