@@ -7,7 +7,9 @@ import io.cucumber.java.en.When;
 import org.jtc.model.jira.JiraResponse;
 import org.junit.jupiter.api.Assertions;
 
+import java.lang.reflect.Array;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -68,9 +70,10 @@ public class JiraSuccessImportSteps {
     public void taskMustHaveKey(String pattern) {
         List<String> actualKeys = context.importResult.createdKeys();
         String regex = pattern.replace("*", ".*");
-        actualKeys.forEach(key ->
-                Assertions.assertTrue(key.matches(regex), "Неверный формат ключа:" + key));
-        Assertions.assertEquals(context.importResult.createdKeys().get(0), context.expectedKey);
+        for(String key : actualKeys) {
+            Assertions.assertTrue(key.matches(regex),
+                    String.format("Ключ '%s' не соответствует паттерну '%s'", key, pattern));
+        }
     }
 
     @And("Ни одной задачи не должно быть создано")

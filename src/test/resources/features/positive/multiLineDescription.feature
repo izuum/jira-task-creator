@@ -6,18 +6,18 @@ Feature: Импорт задач - позитивные сценарий
     Given Используются тестовые учетные данные Jira
     And Задан вид ключа возвращаемый от Jira
 
-  Scenario: Успешный импорт одной задачи со всеми доступными полями
+  Scenario: Импорт задачи с многострочным описанием
     Given Подготовлен YAML файл с задачами по пути C:/Temp
     """
     issues:
     - project: "TEST"
-      summary: "some summary for test"
+      summary: "Some summary for test with multi-line description"
       type: "Task"
-      priority: "High"
-      description: "some description for test"
+      description: "This multi-line description
+                    shouldn't break 
+                    this program,
+                    and test will successful"
     """
-
     When Запустить программу JiraTaskCreator
     Then Программа должна завершиться успешно
     And Кол-во созданных в Jira задач: 1
-    And Jira возвращает ключ задачи вида "*-*"

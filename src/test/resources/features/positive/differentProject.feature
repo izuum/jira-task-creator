@@ -6,18 +6,21 @@ Feature: Импорт задач - позитивные сценарий
     Given Используются тестовые учетные данные Jira
     And Задан вид ключа возвращаемый от Jira
 
-  Scenario: Успешный импорт одной задачи со всеми доступными полями
+  Scenario: Импорт задач в разные проекты из одного файла
     Given Подготовлен YAML файл с задачами по пути C:/Temp
     """
     issues:
+    - project: "PROD"
+      summary: "Summary for project TEST"
+      type: "Баг"
     - project: "TEST"
-      summary: "some summary for test"
+      summary: "Summary for project PROD"
       type: "Task"
-      priority: "High"
-      description: "some description for test"
+    - project: "DEV"
+      summary: "Summary for project DEV"
+      type: "Feature"
     """
-
     When Запустить программу JiraTaskCreator
     Then Программа должна завершиться успешно
-    And Кол-во созданных в Jira задач: 1
+    And Кол-во созданных в Jira задач: 3
     And Jira возвращает ключ задачи вида "*-*"
